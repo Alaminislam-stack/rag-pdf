@@ -1,0 +1,6 @@
+{
+  "name": "Cognitive AI",
+  "description": "An AI-powered PDF RAG (Retrieval Augmented Generation) SaaS application featuring interactive chat, smart document viewer, search, and knowledge graph capabilities.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
