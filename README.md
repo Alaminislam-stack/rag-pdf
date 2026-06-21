@@ -1,7 +1,8 @@
-# 📄 RAG-PDF: Bengali-Optimized Smart AI PDF Assistant & Evaluator
-
 <div align="center">
-  <img src="https://ai.google.dev/static/site-assets/images/share-ais-513315318.png" alt="RAG-PDF Banner" width="100%" style="border-radius: 10px;" />
+  <img src="client/public/favicon.png" alt="Cognitive AI Logo" width="120" height="120" style="border-radius: 24px; margin-bottom: 10px;" />
+
+  # 🧠 COGNITIVE AI
+  ### Bengali-Optimized Smart AI PDF Assistant & Evaluator
 
   [![React](https://img.shields.io/badge/React-19.0.0-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://react.dev/)
   [![Vite](https://img.shields.io/badge/Vite-6.2.3-646CFF?style=for-the-badge&logo=vite&logoColor=white)](https://vite.dev/)
@@ -15,9 +16,9 @@
 
 ## 🌟 Introduction
 
-**RAG-PDF** is an advanced, production-grade Retrieval-Augmented Generation (RAG) platform optimized for processing PDF documents, with **specialized native support for Bengali text correction and HSC/SSC-style academic answer evaluation**. 
+**Cognitive AI** is an advanced, production-grade Retrieval-Augmented Generation (RAG) platform optimized for processing PDF documents, with **specialized native support for Bengali text correction and HSC/SSC-style academic answer evaluation**. 
 
-Using **Google Gemini Pro** for generation and embeddings, **ChromaDB / Supabase Vector Store** for semantic search, and a responsive **React 19 + Tailwind v4 + Framer Motion** frontend, RAG-PDF delivers a seamless split-screen PDF reading and conversational experience.
+Using **Google Gemini Pro** for generation and embeddings, **ChromaDB / Supabase Vector Store** for semantic search, and a responsive **React 19 + Tailwind v4 + Framer Motion** frontend, Cognitive AI delivers a seamless split-screen PDF reading and conversational experience.
 
 ---
 
