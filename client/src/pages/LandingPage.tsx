@@ -100,19 +100,19 @@ export const LandingPage: React.FC = () => {
       <header className="sticky top-0 z-50 backdrop-blur-md bg-white/75 dark:bg-slate-950/75 border-b border-slate-200/60 dark:border-slate-900 transition-colors">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 flex items-center justify-between">
           <div className="flex items-center gap-3 cursor-pointer" onClick={() => navigate('/')}>
-            <div className="h-10 w-10 rounded-xl bg-gradient-to-tr from-indigo-600 to-violet-500 flex items-center justify-center text-white shadow-md">
-              <Sparkles className="h-5 w-5" />
-            </div>
+            <img 
+              src="/favicon.png" 
+              alt="Cognitive AI Logo" 
+              className="h-10 w-10 rounded-xl object-cover shadow-md"
+            />
             <div className="flex flex-col text-left">
               <span className="font-bold text-slate-900 dark:text-white tracking-tight leading-none text-base">COGNITIVE AI</span>
-              <span className="text-[10px] text-indigo-600 dark:text-indigo-400 font-bold tracking-wider uppercase mt-1">SaaS PDF Enclave</span>
             </div>
           </div>
 
           <nav className="hidden md:flex items-center gap-8 text-sm font-semibold text-slate-600 dark:text-slate-300">
             <a href="#features" className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Features</a>
             <a href="#demo" className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Interactive Demo</a>
-            <a href="#pricing" className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Pricing</a>
             <a href="#faq" className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">FAQ</a>
           </nav>
 
@@ -513,200 +513,6 @@ export const LandingPage: React.FC = () => {
         </div>
       </section>
 
-      {/* 5. PRICING SECTION */}
-      <section id="pricing" className="py-20 md:py-28 bg-slate-50 dark:bg-slate-950 border-t border-slate-200/40 dark:border-slate-900/40 relative">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-
-          <div className="text-center max-w-2xl mx-auto mb-14">
-            <span className="text-xs font-bold text-indigo-600 dark:text-indigo-400 tracking-wider uppercase block mb-2">SIMPLE PRICING</span>
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight">
-              Fair, Transparent Pricing Tiers
-            </h2>
-            <p className="text-slate-500 dark:text-slate-350 text-sm sm:text-base mt-2">
-              Start parsing documents in our Sandbox tier completely free. Upgrade anytime with monthly or annual terms.
-            </p>
-
-            {/* Billing Toggle */}
-            <div className="inline-flex items-center gap-1.5 p-1 rounded-full bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 mt-8">
-              <button
-                onClick={() => setBillingPeriod('monthly')}
-                className={`px-4.5 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer ${billingPeriod === 'monthly'
-                    ? 'bg-indigo-600 text-white shadow-sm'
-                    : 'text-slate-500 hover:text-slate-800 dark:hover:text-white'
-                  }`}
-              >
-                Monthly
-              </button>
-              <button
-                onClick={() => setBillingPeriod('yearly')}
-                className={`px-4.5 py-1.5 rounded-full text-xs font-bold transition-all flex items-center gap-1 cursor-pointer ${billingPeriod === 'yearly'
-                    ? 'bg-indigo-600 text-white shadow-sm'
-                    : 'text-slate-500 hover:text-slate-800 dark:hover:text-white'
-                  }`}
-              >
-                <span>Yearly</span>
-                <span className="text-[9px] bg-emerald-500 text-white px-1 py-0.5 rounded font-black tracking-wide leading-none uppercase">
-                  Save 20%
-                </span>
-              </button>
-            </div>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-6 max-w-6xl mx-auto items-stretch text-left">
-
-            {/* Tier 1 */}
-            <div className="p-6 sm:p-8 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/60 dark:border-slate-800/80 shadow-sm flex flex-col justify-between">
-              <div>
-                <span className="text-[10px] font-black tracking-wider uppercase text-slate-400 block mb-1">INDIVIDUAL</span>
-                <h3 className="text-xl font-extrabold text-slate-950 dark:text-white">Sandbox Free</h3>
-                <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 leading-normal">For testing out primary RAG functions on small archives.</p>
-
-                <div className="my-6">
-                  <span className="text-3xl font-extrabold text-slate-950 dark:text-white">$0</span>
-                  <span className="text-xs text-slate-400 font-medium"> / forever</span>
-                </div>
-
-                <hr className="border-slate-100 dark:border-slate-800 my-6" />
-
-                <ul className="space-y-3.5 text-xs text-slate-600 dark:text-slate-350">
-                  <li className="flex items-center gap-2">
-                    <Check className="h-4 w-4 text-emerald-500 shrink-0" />
-                    <span>Upload up to 5 PDFs total</span>
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <Check className="h-4 w-4 text-emerald-500 shrink-0" />
-                    <span>50 MB individual file limit</span>
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <Check className="h-4 w-4 text-emerald-500 shrink-0" />
-                    <span>100 AI queries per month</span>
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <Check className="h-4 w-4 text-emerald-500 shrink-0" />
-                    <span>Basic Citation view maps</span>
-                  </li>
-                </ul>
-              </div>
-
-              <button
-                onClick={() => navigate('/register')}
-                className="w-full mt-8 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-white font-bold text-xs tracking-wider uppercase hover:bg-slate-50 dark:hover:bg-slate-750 transition-colors cursor-pointer"
-              >
-                Start Free Sandbox
-              </button>
-            </div>
-
-            {/* Tier 2 (Highlighted) */}
-            <div className="p-6 sm:p-8 rounded-3xl bg-white dark:bg-slate-900 border-2 border-indigo-600 shadow-xl relative flex flex-col justify-between">
-              <div className="absolute top-0 right-6 -translate-y-1/2 bg-indigo-600 text-white text-[10px] font-black tracking-widest uppercase px-3 py-1 rounded-full shadow-md">
-                MOST POPULAR
-              </div>
-
-              <div>
-                <span className="text-[10px] font-black tracking-wider uppercase text-indigo-650 dark:text-indigo-400 block mb-1">ACADEMICS & AUDITORS</span>
-                <h3 className="text-xl font-extrabold text-slate-950 dark:text-white">Pro Scholar</h3>
-                <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 leading-normal">For professional legal, medical, and scientific dossier indexing.</p>
-
-                <div className="my-6">
-                  <span className="text-4xl font-extrabold text-slate-950 dark:text-white">
-                    ${billingPeriod === 'yearly' ? '15' : '19'}
-                  </span>
-                  <span className="text-xs text-slate-400 font-medium"> / Month</span>
-                  {billingPeriod === 'yearly' && (
-                    <span className="block text-[10px] text-emerald-500 font-bold mt-1">Billed annually ($180/yr)</span>
-                  )}
-                </div>
-
-                <hr className="border-slate-100 dark:border-slate-800 my-6" />
-
-                <ul className="space-y-3.5 text-xs text-slate-600 dark:text-slate-350">
-                  <li className="flex items-center gap-2">
-                    <Check className="h-4 w-4 text-emerald-500 shrink-0" />
-                    <span className="font-semibold">Unlimited PDF Doc uploads</span>
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <Check className="h-4 w-4 text-emerald-500 shrink-0" />
-                    <span>250 MB individual file limit</span>
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <Check className="h-4 w-4 text-emerald-500 shrink-0" />
-                    <span className="font-semibold">5,000 vector queries /mo</span>
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <Check className="h-4 w-4 text-emerald-500 shrink-0" />
-                    <span>Dynamic Knowledge Graphs</span>
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <Check className="h-4 w-4 text-emerald-500 shrink-0" />
-                    <span>Split-pane notes panel edits</span>
-                  </li>
-                </ul>
-              </div>
-
-              <button
-                onClick={() => navigate('/register')}
-                className="w-full mt-8 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs tracking-wider uppercase shadow-md hover:shadow-indigo-500/20 transition-all cursor-pointer"
-              >
-                Access Pro Workspace
-              </button>
-            </div>
-
-            {/* Tier 3 */}
-            <div className="p-6 sm:p-8 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/60 dark:border-slate-800/80 shadow-sm flex flex-col justify-between">
-              <div>
-                <span className="text-[10px] font-black tracking-wider uppercase text-slate-400 block mb-1">ORGANIZATIONS</span>
-                <h3 className="text-xl font-extrabold text-slate-950 dark:text-white">Corporate Enclave</h3>
-                <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 leading-normal">For collaborative teams and high-compliance workspaces.</p>
-
-                <div className="my-6">
-                  <span className="text-3xl font-extrabold text-slate-950 dark:text-white">
-                    ${billingPeriod === 'yearly' ? '79' : '99'}
-                  </span>
-                  <span className="text-xs text-slate-400 font-medium"> / Month</span>
-                  {billingPeriod === 'yearly' && (
-                    <span className="block text-[10px] text-emerald-500 font-bold mt-1">Billed annually ($948/yr)</span>
-                  )}
-                </div>
-
-                <hr className="border-slate-100 dark:border-slate-800 my-6" />
-
-                <ul className="space-y-3.5 text-xs text-slate-600 dark:text-slate-350">
-                  <li className="flex items-center gap-2">
-                    <Check className="h-4 w-4 text-emerald-500 shrink-0" />
-                    <span>Everything in Pro Scholar</span>
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <Check className="h-4 w-4 text-emerald-500 shrink-0" />
-                    <span className="font-semibold">Collaborative multi-user teams</span>
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <Check className="h-4 w-4 text-emerald-500 shrink-0" />
-                    <span>Dedicated vector DB instance</span>
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <Check className="h-4 w-4 text-emerald-500 shrink-0" />
-                    <span className="font-semibold">SAML SSO & MFA Login</span>
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <Check className="h-4 w-4 text-emerald-500 shrink-0" />
-                    <span>Priority compliance SLA</span>
-                  </li>
-                </ul>
-              </div>
-
-              <button
-                onClick={() => navigate('/register')}
-                className="w-full mt-8 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-white font-bold text-xs tracking-wider uppercase hover:bg-slate-50 dark:hover:bg-slate-750 transition-colors cursor-pointer"
-              >
-                Deploy Secure Shield
-              </button>
-            </div>
-
-          </div>
-
-        </div>
-      </section>
-
       {/* 6. FAQ ACCORDION SECTION */}
       <section id="faq" className="py-20 md:py-28 bg-slate-100/30 dark:bg-slate-900/10 border-t border-slate-200/50 dark:border-slate-900/50 relative">
         <div className="max-w-4xl mx-auto px-4 sm:px-6">
@@ -762,9 +568,11 @@ export const LandingPage: React.FC = () => {
             {/* Branding Column */}
             <div className="md:col-span-5 space-y-4">
               <div className="flex items-center gap-3">
-                <div className="h-9 w-9 rounded-xl bg-gradient-to-tr from-indigo-600 to-violet-500 flex items-center justify-center text-white shadow-md shadow-indigo-500/15">
-                  <Sparkles className="h-4 w-4" />
-                </div>
+                <img 
+                  src="/favicon.png" 
+                  alt="Cognitive AI Logo" 
+                  className="h-9 w-9 rounded-xl object-cover shadow-md shadow-indigo-500/15"
+                />
                 <span className="font-bold text-white tracking-tight leading-none text-[15px]">COGNITIVE AI PDF</span>
               </div>
               <p className="text-xs text-slate-400 leading-relaxed max-w-sm">
@@ -781,7 +589,6 @@ export const LandingPage: React.FC = () => {
               <ul className="space-y-2 text-xs">
                 <li><a href="#features" className="hover:text-white transition-colors">Key Capabilities</a></li>
                 <li><a href="#demo" className="hover:text-white transition-colors">Interactive Demo</a></li>
-                <li><a href="#pricing" className="hover:text-white transition-colors">Pricing Structure</a></li>
                 <li><button onClick={() => navigate('/dashboard')} className="hover:text-white transition-colors text-left">User Workspace</button></li>
               </ul>
             </div>

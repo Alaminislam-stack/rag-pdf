@@ -43,9 +43,11 @@ export default function Login() {
   return (
    <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-950 p-4 md:p-6 text-slate-800 dark:text-slate-100 font-sans relative">
       <div className="absolute top-10 flex items-center gap-2.5">
-        <div className="h-9 w-9 rounded-xl bg-indigo-650 flex items-center justify-center text-white">
-          <Sparkles className="h-4 w-4" />
-        </div>
+        <img 
+          src="/favicon.png" 
+          alt="Cognitive AI Logo" 
+          className="h-9 w-9 rounded-xl object-cover"
+        />
         <span className="font-bold text-sm tracking-tight text-slate-800 dark:text-white">
           COGNITIVE AI
         </span>

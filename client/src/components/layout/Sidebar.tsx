@@ -68,9 +68,11 @@ export const Sidebar: React.FC = () => {
           onClick={() => navigate("/")}
           className="flex items-center gap-3 cursor-pointer select-none overflow-hidden"
         >
-          <div className="h-10 w-10 shrink-0 rounded-xl bg-gradient-to-tr from-indigo-600 to-violet-500 flex items-center justify-center text-white shadow-md shadow-indigo-200 dark:shadow-none">
-            <Sparkles className="h-5 w-5 animate-pulse" />
-          </div>
+          <img 
+            src="/favicon.png" 
+            alt="Cognitive AI Logo" 
+            className="h-10 w-10 shrink-0 rounded-xl object-cover shadow-md shadow-indigo-200 dark:shadow-none"
+          />
           {!isCollapsed && (
             <div className="flex flex-col">
               <span className="font-bold text-slate-800 dark:text-white tracking-tight leading-none text-[15px]">
