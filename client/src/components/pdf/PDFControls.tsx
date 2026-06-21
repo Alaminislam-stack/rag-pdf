@@ -6,6 +6,7 @@ import { useAppContext } from "../../context/AppContext";
 import axiosInstanceUtility from "@/src/utils/axiosInstanceUtility";
 import { useAuth } from "@/src/context/AuthContext";
 import { useOtherContext } from "@/src/context/OtherContext";
+import { Link } from "react-router-dom";
 
 interface PDFCardProps {
   pdf: PDFDocument;
@@ -93,10 +94,10 @@ export const UploadPDFBox: React.FC<UploadPDFBoxProps> = ({ onUploadSuccess, col
   const formData = new FormData();
   formData.append("file", selectedFile);
   formData.append("collectionId", collection);
-  
+
   const uploadPdfFile = async () => {
     setIsUploading(true);
-    const res = await uploadPDF({ 
+    const res = await uploadPDF({
       selectedFile,
       formData
     })
@@ -121,21 +122,29 @@ export const UploadPDFBox: React.FC<UploadPDFBoxProps> = ({ onUploadSuccess, col
               </span>
             )}
           </div>
-          <select
-            hidden={collection === "new-collection"}
-            value={collection}
-            onChange={(e) => {
-              setCollection(e.target.value);
-            }}
-            className="w-full px-4 py-2 border border-slate-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 cursor-pointer"
-          >
-            <option value="">Default Collection</option>
-            {collectionsList.map((collection) => (
-              <option key={collection.id} value={collection.id.toLowerCase().replace(/\s+/g, "-")}>
-                {collection.name}
-              </option>
-            ))}
-          </select>
+          {
+            collectionsList.length === 0 ? (
+              <p className="text-center"><Link to={"/dashboard/collections"}  className="text-indigo-600 font-medium hover:underline">Create collections first</Link></p>
+            ) : (
+              <select
+                value={collection}
+                onChange={(e) => {
+                  setCollection(e.target.value);
+                }}
+                className="w-full px-4 py-2 border border-slate-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 cursor-pointer"
+              >
+                <option value="">Default Collection</option>
+                {
+
+                  collectionsList.map((collection) => (
+                    <option key={collection.id} value={collection.id.toLowerCase().replace(/\s+/g, "-")}>
+                      {collection.name}
+                    </option>
+                  ))
+                }
+              </select>
+            )
+          }
         </div>
       </div>
       {isUploading ? (

@@ -2,32 +2,63 @@ import React, { useState, useEffect } from 'react';
 import {
   User,
   Mail,
-  Building2,
-  ShieldAlert,
-  Key,
-  CheckCircle,
-  Eye,
-  EyeOff,
-  Briefcase
 } from 'lucide-react';
 import { Card, Input, Button } from '../components/common/UIControls';
 import { useAuth } from '../context/AuthContext';
+import { supabase } from '../utils/supabase/supabase';
+import { toast } from 'react-toastify';
 
 export const ProfileSettings: React.FC = () => {
-  const { session } = useAuth();
+  const { session, refreshProfile } = useAuth();
   const user = session?.user;
+  const [loading, setLoading] = useState(false);
 
-  const [name, setName] = useState(user?.user_metadata?.full_name || '');
-  const [email, setEmail] = useState(user?.email || '');
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
 
-  // Sync state with user data once loaded
+  const fachProfile = async () => {
+    setLoading(true);
+    const { data, error } = await supabase
+      .from('profiles')
+      .select('*')
+      .eq('id', user?.id)
+      .maybeSingle();
+
+    setLoading(false);
+    if (error) {
+      toast.error(error.message);
+      console.error(error);
+      return;
+    }
+
+    if (data) {
+      setName(data.name || '');
+      setEmail(data.email || '');
+    }
+  };
+
   useEffect(() => {
     if (user) {
-      setName(user.user_metadata?.full_name || '');
-      setEmail(user.email || '');
+      fachProfile();
     }
   }, [user]);
 
+  const handleUpdate = async () => {
+    setLoading(true);
+    if (!user?.id) return;
+    const { data, error } = await supabase
+      .from('profiles')
+      .upsert({ id: user.id, name })
+      .select();
+
+
+    setLoading(false);
+    if (error) toast.error(error.message);
+    else {
+      toast.success("Profile updated successfully");
+      await refreshProfile();
+    }
+  };
 
   return (
     <div className="space-y-6 text-left max-w-3xl">
@@ -54,11 +85,9 @@ export const ProfileSettings: React.FC = () => {
               <span className="text-sm font-black text-slate-800 dark:text-white mt-3.5">
                 {name || user?.user_metadata?.full_name || 'User Persona'}
               </span>
-              <span className="text-[10px] font-black uppercase text-indigo-700 dark:text-indigo-400 bg-indigo-50 dark:bg-slate-850 px-2.5 py-0.5 rounded-full mt-1.5 leading-none">PRO ACCOUNT MEMBER</span>
               <p className="text-[11px] text-slate-400 mt-2">
                 {user?.user_metadata?.company || 'No Company'}
               </p>
-              <button className="text-[11px] font-bold text-indigo-600 dark:text-indigo-400 hover:underline cursor-pointer mt-4.5">Change Avatar Frame</button>
             </div>
           </Card>
         </div>
@@ -86,10 +115,12 @@ export const ProfileSettings: React.FC = () => {
                     required
                   />
                 </div>
-                <Button type="submit" className="mt-2 text-xs">Save Profile Commit</Button>
               </div>
             </Card>
           </form>
+          <Button onClick={handleUpdate} disabled={loading} className="mt-2 text-xs">
+            {loading ? 'Saving...' : 'Save Profile Commit'}
+          </Button>
         </div>
 
       </div>

@@ -17,8 +17,9 @@ export const Topbar: React.FC = () => {
   } = useAppContext();
 
   const [showProfileMenu, setShowProfileMenu] = useState(false);
-  const {session} = useAuth();
-  const user = session?.user;
+  const {session, profile } = useAuth();
+
+  console.log(profile)
 
   async function signOut() {
   const { error } = await supabase.auth.signOut()
@@ -59,13 +60,13 @@ export const Topbar: React.FC = () => {
             className="flex items-center gap-2 p-1 pl-1.5 pr-3 cursor-pointer rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 border border-transparent hover:border-slate-150 transition-all text-left"
           >
             <img
-                src={user?.user_metadata?.avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=256&auto=format&fit=crop'}
+                src={profile?.avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=256&auto=format&fit=crop'}
                 alt="Avatar"
                 referrerPolicy="no-referrer"
                 className="h-8 w-8 rounded-full object-cover ring-2 ring-indigo-550/20 shadow-lg"
               />
             <div className="hidden md:flex flex-col">
-              <span className="text-xs font-bold text-slate-800 dark:text-white leading-none">{user?.user_metadata?.full_name}</span>
+              <span className="text-xs font-bold text-slate-800 dark:text-white leading-none">{profile?.name}</span>
               <span className="text-[10px] text-indigo-600 dark:text-indigo-400 font-semibold tracking-wide uppercase mt-0.5">PRO USER</span>
             </div>
           </button>
@@ -74,7 +75,7 @@ export const Topbar: React.FC = () => {
             <div className="absolute right-0 top-12 w-64 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-2xl p-3 z-40 flex flex-col gap-2">
               <div className="p-2 border-b border-slate-100 dark:border-slate-800">
                 <span className="text-xs text-slate-400 font-semibold leading-none">Registered Account</span>
-                <p className="text-xs font-bold text-slate-800 dark:text-white mt-1 leading-tight">{user.email}</p>
+                <p className="text-xs font-bold text-slate-800 dark:text-white mt-1 leading-tight">{profile?.email}</p>
               </div>
 
               <button 
