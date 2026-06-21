@@ -6,6 +6,7 @@ import {
   Plus,
   FileText,
   ChevronRight,
+  Loader2,
 } from "lucide-react";
 import { useAppContext } from "../context/AppContext";
 import { Card, Button, Table, Input } from "../components/common/UIControls";
@@ -14,6 +15,7 @@ import { Collection, PDFDocument } from "../types";
 import axiosInstanceUtility from "../utils/axiosInstanceUtility";
 import { useAuth } from "../context/AuthContext";
 import { useOtherContext } from "../context/OtherContext";
+import { toast } from 'react-toastify';
 
 export const Collections: React.FC = () => {
   // const { pdfs } = useAppContext();
@@ -23,10 +25,10 @@ export const Collections: React.FC = () => {
   const [colName, setColName] = useState("");
 
   // Fetch collections from Supabase
-  const { collections, pdfs } = useOtherContext();
+  const { collections, pdfs, createCollection, deleteCollection, loading } = useOtherContext();
 
   // console.log(collections);
-  
+
 
   // Find active drilldown
   const activeCol = collections.find((c) => c.id === selectedColId) || null;
@@ -34,23 +36,38 @@ export const Collections: React.FC = () => {
     ? pdfs.filter((p) => p.collection_id === activeCol.id)
     : [];
 
+
+
   const handleCreateCollection = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!colName.trim()) return;
-    try {
-      const result = await axiosInstanceUtility.post(
-        "/create-collection",
-        {
-          name: colName,
-        },
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        },
-      );
+    const response = await createCollection({ name: colName });
+    if (response) {
       setColName("");
       setShowColModal(false);
-    } catch (error) {
-      console.error("Error creating collection:", error);
+    }
+  };
+
+  const handleDeleteCollection = async (collectionId: string) => {
+    const hasPdf = pdfs.some(
+      (pdf) => pdf.collection_id === collectionId
+    );
+
+    if (hasPdf) {
+      toast.error("Please delete all the documents in this collection first");
+      return
+    }
+    const confirmDelete = window.confirm("Are you sure you want to delete this collection?");
+    if (!confirmDelete) return;
+
+    if (colPdfs.length > 0) {
+      console.log("Please delete all the documents in this collection first");
+      alert("Please delete all the documents in this collection first");
+      return;
+    }
+    const response = await deleteCollection(collectionId);
+    if (response) {
+      setSelectedColId(null);
     }
   };
 
@@ -174,7 +191,18 @@ export const Collections: React.FC = () => {
                         <span className="text-xs text-slate-500">
                           {count} docs
                         </span>
-                        <span className="text-xs text-indigo-600">View →</span>
+                        <div className="flex items-center gap-3">
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleDeleteCollection(col.id);
+                            }}
+                            className="text-xs text-red-600 hover:text-red-800"
+                          >
+                            Delete
+                          </button>
+                          <span className="text-xs text-indigo-600">View →</span>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -193,11 +221,11 @@ export const Collections: React.FC = () => {
         maxWidth="sm"
         footer={
           <div className="flex justify-end gap-2">
-            <Button onClick={() => setShowColModal(false)} variant="ghost">
+            <Button onClick={() => setShowColModal(false)}  variant="ghost">
               Cancel
             </Button>
-            <Button onClick={handleCreateCollection} disabled={!colName.trim()}>
-              Create
+            <Button onClick={handleCreateCollection} className="bg-blue-500 text-white cursor-pointer" disabled={!colName.trim()}>
+              {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : "Create"}
             </Button>
           </div>
         }

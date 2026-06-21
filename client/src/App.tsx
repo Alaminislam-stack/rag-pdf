@@ -18,6 +18,7 @@ import ProtectedRoute from "./components/common/ProtectedRoute";
 import { AuthProvider } from "./context/AuthContext";
 import { OtherProvider } from "./context/OtherContext";
 import ChatHome from "./pages/ChatHome";
+ import { ToastContainer } from 'react-toastify';
 
 export default function App() {
   return (
@@ -57,6 +58,7 @@ export default function App() {
               />
               <Route path="*" element={<NotFoundPage />} />
             </Routes>
+            <ToastContainer />
           </OtherProvider>
         </AuthProvider>
       </BrowserRouter>

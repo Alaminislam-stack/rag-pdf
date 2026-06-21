@@ -85,31 +85,6 @@ const uploadController = asyncHandler(async (req, res, next) => {
   });
 });
 
-const getPdfController = asyncHandler(async (req, res, next) => {
-  const { collectionId } = req.body;
-  // console.log('hello')
-  const collection = await client.getCollection({
-    name: "rag-documents",
-  });
-  if (!collection) {
-    return next(new errorHandler(400, "Collection not found"));
-  }
-
-  // console.log(collection)
-
-  const results = await collection.query({
-    queryEmbeddings,
-    nResults: 5,
-    where: {
-      userId: req.user.id,
-      collectionId,
-    },
-  });
-  console.log(results);
-
-  return res.status(200).json({ results });
-});
-
 const createCollection = asyncHandler(async (req, res, next) => {
   const { name } = req.body;
   if (!name) {
@@ -153,6 +128,68 @@ const getCollections = asyncHandler(async (req, res, next) => {
   });
 });
 
+const deletePdf = asyncHandler(
+  async (req, res, next) => {
+    const { pdfId } = req.params;
+    console.log("pdfId", pdfId);
+
+    const collection = await client.getCollection({
+      name: "rag-documents",
+    });
+
+    console.log("collection", collection);
+
+   const data = await collection.delete({
+      where: {
+        $and: [
+          { pdfId },
+          { userId: req.user.id }
+        ]
+      }
+    });
+
+    if (!data) {
+      return next(new errorHandler(400, "Something went wrong"));
+    }
+
+    const deletePDF = await supabase
+      .from("pdfs")
+      .delete()
+      .eq("id", pdfId)
+      .eq("user_id", req.user.id);
+
+      if (!deletePDF) {
+        return next(new errorHandler(400, "Something went wrong from supabase"));
+      }
+
+    return res.status(200).json({
+      success: true,
+      message: "PDF deleted successfully",
+    });
+  }
+);
+
+const deleteCollection = asyncHandler(
+  async (req, res, next) => {
+    const { collectionId } = req.params;
+    // console.log("collectionId", collectionId);
+
+    const deleteCollection = await supabase
+      .from("collections")
+      .delete()
+      .eq("id", collectionId)
+      .eq("user_id", req.user.id);
+
+      if (!deleteCollection) {
+        return next(new errorHandler(400, "Something went wrong from supabase"));
+      }
+
+    return res.status(200).json({
+      success: true,
+      message: "Collection deleted successfully",
+    });
+  }
+);
 const getPdf = asyncHandler(async (req, res, next) => {
   const { data, error } = await supabase
     .from("pdfs")
@@ -169,4 +206,4 @@ const getPdf = asyncHandler(async (req, res, next) => {
   });
 });
 
-export { uploadController, getPdf, createCollection, getCollections };
+export { uploadController, getPdf, createCollection, getCollections, deletePdf, deleteCollection };

@@ -26,7 +26,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
   const token = session?.access_token ?? null;
 
-  console.log(session);
+  // console.log(session);
   
 
   useEffect(() => {

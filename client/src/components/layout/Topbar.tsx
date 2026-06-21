@@ -8,6 +8,7 @@ import {
 import { useAppContext } from '../../context/AppContext';
 import { supabase } from '@/src/utils/supabase/supabase';
 import { useAuth } from '@/src/context/AuthContext';
+import { toast } from 'react-toastify';
 
 export const Topbar: React.FC = () => {
   const { 
@@ -23,8 +24,10 @@ export const Topbar: React.FC = () => {
   const { error } = await supabase.auth.signOut()
   if(error){
     console.error(error);
+    toast.error(error.message);
     return;
   }
+  toast.success("Sign out successful!");
   navigate('/login');
 }
   

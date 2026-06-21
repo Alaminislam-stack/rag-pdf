@@ -4,6 +4,7 @@ import { Button, Card, Input } from "../components/common/UIControls";
 import { supabase } from "@/src/utils/supabase/supabase";
 import { Navigate, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { toast } from "react-toastify";
 
 function Register() {
   const navigate = useNavigate();
@@ -21,7 +22,7 @@ function Register() {
 
 
   const handleAction = (e: React.FormEvent) => {
-    e.preventDefault();
+    e.preventDefault(); 
     supabase.auth
       .signUp({
         email: email,
@@ -34,12 +35,9 @@ function Register() {
       })
       .then(({ data, error }) => {
         if (error) {
-          alert("Error: " + error.message);
+          toast.error(error.message);
         } else {
-          alert(
-            "Registration successful! Please check your email to verify your account.",
-          );
-          console.log("User registered data:", data.user);
+          toast.success("Registration successful! Please check your email to verify your account.");
         }
       });
   };

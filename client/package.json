@@ -24,6 +24,7 @@
     "react-dom": "^19.0.1",
     "react-hook-form": "^7.78.0",
     "react-router-dom": "^7.17.0",
+    "react-toastify": "^11.1.0",
     "recharts": "^3.8.1",
     "vite": "^6.2.3"
   },

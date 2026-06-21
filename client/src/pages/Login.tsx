@@ -4,6 +4,7 @@ import { Lock, Mail, Sparkles } from 'lucide-react';
 import { Button, Card, Input } from '../components/common/UIControls';
 import { useAuth } from '../context/AuthContext';
 import { Navigate, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 export default function Login() {
   const navigate = useNavigate();
@@ -32,9 +33,9 @@ export default function Login() {
 
     if (error) {
       setError(error.message);
+      toast.error(error.message);
     } else {
-      alert('Login successful!');
-      console.log('User logged in data:', data.user);
+      toast.success('Login successful!');
     }
     setLoading(false);
   };

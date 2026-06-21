@@ -20,17 +20,13 @@ import {
 import { useAppContext } from "../../context/AppContext";
 import { supabase } from "@/src/utils/supabase/supabase";
 import { useOtherContext } from "@/src/context/OtherContext";
+import { toast } from "react-toastify";
 
 export const Sidebar: React.FC = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
-  const [workspace, setWorkspace] = useState("Personal Workspace");
-  const [showWorkspaceMenu, setShowWorkspaceMenu] = useState(false);
-  const { subscription } = useAppContext();
   const navigate = useNavigate();
   const location = useLocation();
-
-    const { pdfs } = useOtherContext()
-
+  
   const menuItems = [
     { name: "Dashboard", icon: LayoutDashboard, path: "/dashboard" },
     { name: "PDF Archive", icon: FileText, path: "/dashboard/pdfs" },
@@ -39,7 +35,15 @@ export const Sidebar: React.FC = () => {
     { name: "My Profile", icon: User, path: "/dashboard/profile" },
   ];
   async function signOut() {
-    const { error } = await supabase.auth.signOut();
+    const { error } = await supabase.auth.signOut()
+    if(error){
+        console.error(error);
+        toast.error(error.message);
+        return;
+      }
+      toast.success("Sign out successful!");
+      navigate('/login');
+
   }
   const handleNav = (path: string) => {
     navigate(path);

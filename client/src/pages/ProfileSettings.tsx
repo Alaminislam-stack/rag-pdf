@@ -81,8 +81,8 @@ export const ProfileSettings: React.FC = () => {
                     label="Registered Work Email"
                     type="email"
                     value={email}
-                    onChange={e => setEmail(e.target.value)}
                     icon={<Mail className="h-4 w-4 text-slate-400" />}
+                    disabled
                     required
                   />
                 </div>

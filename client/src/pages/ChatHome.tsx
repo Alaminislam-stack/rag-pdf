@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from "react";
-import { Menu, X, Send, FolderOpen } from "lucide-react";
+import { Menu, X, Send, FolderOpen, FileText } from "lucide-react";
 import { useOtherContext } from "@/src/context/OtherContext";
 import { ChatMessage } from "../types";
 import { Link } from "react-router-dom";
@@ -125,24 +125,36 @@ function ChatHome() {
             </Link>
             </>
           )}
-          {collections.map((collection) => (
-            <button
-              key={collection.id}
-              onClick={() => {
-                setSelectedCollection(collection);
-                setDrawerOpen(false);
-              }}
-              className={`w-full text-left p-4 rounded-xl border transition-all
-              ${selectedCollection?.id === collection.id
-                  ? "bg-indigo-50 dark:bg-slate-800 border-indigo-500"
-                  : "border-slate-200 dark:border-slate-700 hover:border-indigo-400"
-                }`}
-            >
-              <h3 className="font-semibold">{collection.name}</h3>
-
-              <p className="text-xs text-slate-500 mt-1">Collection</p>
-            </button>
-          ))}
+          {collections.map((collection) => {
+            const isSelected = selectedCollection?.id === collection.id;
+            const collectionPdfs = pdfs.filter((p) => p.collection_id === collection.id);
+            return (
+              <div
+                key={collection.id}
+                className={`w-full rounded-xl border transition-all overflow-hidden
+                ${isSelected
+                    ? "bg-indigo-50 dark:bg-slate-800 border-indigo-500"
+                    : "border-slate-200 dark:border-slate-700 hover:border-indigo-400 bg-white dark:bg-slate-900"
+                  }`}
+              >
+                <button
+                  onClick={() => {
+                    setSelectedCollection(collection);
+                    setDrawerOpen(false);
+                  }}
+                  className="w-full text-left p-4 focus:outline-none"
+                >
+                  <h3 className="font-semibold text-slate-900 dark:text-slate-100">{collection.name}</h3>
+                  <div className="flex justify-between items-center mt-1">
+                    <p className="text-xs text-slate-500">Collection</p>
+                    <span className="text-[10px] font-semibold bg-indigo-100 dark:bg-indigo-900/50 text-indigo-700 dark:text-indigo-300 px-2 py-0.5 rounded-full">
+                      {collectionPdfs.length} {collectionPdfs.length === 1 ? 'PDF' : 'PDFs'}
+                    </span>
+                  </div>
+                </button>
+              </div>
+            );
+          })}
         </div>
       </aside>
 
@@ -187,6 +199,42 @@ function ChatHome() {
             </div>
           </div>
         </header>
+
+        {/* ACTIVE COLLECTION DOCUMENTS BAR */}
+        {selectedCollection && (
+          <div className="bg-slate-50/80 dark:bg-slate-900/80 backdrop-blur-sm border-b border-slate-200 dark:border-slate-800 px-4 py-2.5 flex items-center justify-between gap-4 overflow-x-auto whitespace-nowrap scrollbar-none shrink-0">
+            <div className="flex items-center gap-2 overflow-hidden">
+              <span className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider shrink-0">
+                PDFs:
+              </span>
+              <div className="flex gap-1.5 overflow-x-auto scrollbar-none">
+                {curPdfs.length > 0 ? (
+                  curPdfs.map((pdf) => (
+                    <div
+                      key={pdf.id}
+                      className="inline-flex items-center gap-1.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-2.5 py-0.5 rounded-full text-xs font-medium text-slate-700 dark:text-slate-350 shadow-sm shrink-0"
+                    >
+                      <FileText size={12} className="text-indigo-500 dark:text-indigo-400 shrink-0" />
+                      <span className="truncate max-w-[120px] sm:max-w-[200px]" title={pdf.title || pdf.fileName}>
+                        {pdf.title || pdf.fileName}
+                      </span>
+                    </div>
+                  ))
+                ) : (
+                  <span className="text-xs text-slate-400 italic">No PDFs in this collection</span>
+                )}
+              </div>
+            </div>
+            {curPdfs.length === 0 && (
+              <Link
+                to="/dashboard/pdfs"
+                className="text-xs text-indigo-600 hover:text-indigo-500 dark:text-indigo-450 font-semibold hover:underline shrink-0"
+              >
+                + Add PDFs
+              </Link>
+            )}
+          </div>
+        )}
 
         {/* CHAT BODY */}
         <div className="flex-1 overflow-y-auto p-4">
@@ -308,7 +356,7 @@ function ChatHome() {
         ) : (  
           <div className="border-t border-slate-200 dark:border-slate-800 p-4">
             <p className="text-center">No pdf in this collection</p>
-            <Link to={"/dashboard/collections"}>
+            <Link to={"/dashboard/pdfs"}>
               <div className="text-center hover:underline">Add PDF's Faster</div>
             </Link>
           </div>

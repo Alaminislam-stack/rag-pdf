@@ -5,6 +5,7 @@ import { Button } from "../common/UIControls";
 import { useAppContext } from "../../context/AppContext";
 import axiosInstanceUtility from "@/src/utils/axiosInstanceUtility";
 import { useAuth } from "@/src/context/AuthContext";
+import { useOtherContext } from "@/src/context/OtherContext";
 
 interface PDFCardProps {
   pdf: PDFDocument;
@@ -71,7 +72,7 @@ export const UploadPDFBox: React.FC<UploadPDFBoxProps> = ({ onUploadSuccess, col
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [collection, setCollection] = useState<string>("");
   const { token } = useAuth();
-
+  const { uploadPDF } = useOtherContext();
 
   const openFilePicker = () => {
     fileInputRef.current?.click();
@@ -89,32 +90,24 @@ export const UploadPDFBox: React.FC<UploadPDFBoxProps> = ({ onUploadSuccess, col
     setSelectedFile(file);
   };
 
-  const uploadPDF = async () => {
-    if (!selectedFile) return;
+  const formData = new FormData();
+  formData.append("file", selectedFile);
+  formData.append("collectionId", collection);
+  
+  const uploadPdfFile = async () => {
+    setIsUploading(true);
+    const res = await uploadPDF({ 
+      selectedFile,
+      formData
+    })
 
-    try {
-      setIsUploading(true);
-      const formData = new FormData();
-      formData.append("file", selectedFile);
-      formData.append("collectionId", collection);
-
-      const response = await axiosInstanceUtility.post("/upload", formData, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-
-      const title = selectedFile.name.replace(".pdf", "").replace(/_/g, " ");
-      const size = `${(selectedFile.size / 1024 / 1024).toFixed(2)} MB`;
-      const pages = response.data?.totalChunks || 0;
-
-      onUploadSuccess(title, size, pages);
-    } catch (error) {
-      console.error(error);
-      alert("Upload failed");
-    } finally {
+    if (res) {
       setIsUploading(false);
       setSelectedFile(null);
+      setCollection("");
+      onUploadSuccess(selectedFile.name, `${(selectedFile.size / (1024 * 1024)).toFixed(2)} MB`, 0);
     }
-  };
+  }
 
   return (
     <div className="w-full">
@@ -167,7 +160,7 @@ export const UploadPDFBox: React.FC<UploadPDFBoxProps> = ({ onUploadSuccess, col
 
           {selectedFile && (
             <div className="flex gap-2 mt-4">
-              <Button onClick={uploadPDF} disabled={!collection}>Upload</Button>
+              <Button onClick={uploadPdfFile} disabled={!collection}>Upload</Button>
               <Button variant="outline" onClick={() => setSelectedFile(null)}>Cancel</Button>
             </div>
           )}

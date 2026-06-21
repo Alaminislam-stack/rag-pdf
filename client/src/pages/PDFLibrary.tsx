@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
-import { 
-  Grid2X2, 
-  List, 
-  Plus, 
-  Search, 
-  FolderHeart, 
-  Tag, 
-  Eye, 
-  Trash2, 
-  Star, 
-  BookOpen, 
-  Save, 
+import {
+  Grid2X2,
+  List,
+  Plus,
+  Search,
+  FolderHeart,
+  Tag,
+  Eye,
+  Trash2,
+  Star,
+  BookOpen,
+  Save,
   X,
   Sparkles,
   Award
@@ -23,16 +23,18 @@ import { PDFDocument } from '../types';
 import { useOtherContext } from '@/src/context/OtherContext'
 
 export const PDFLibrary: React.FC = () => {
-  const { 
+  const {
     // pdfs, 
     // collections, 
-    addCollection, 
-    deletePDF, 
+    addCollection,
     toggleFavoritePDF,
-    updatePDFNotes 
+    updatePDFNotes
   } = useAppContext();
 
-  const {pdfs, collections} = useOtherContext();
+  const { pdfs, collections, deletePDF } = useOtherContext();
+
+  //  console.log(pdfs);
+
 
   // console./)
 
@@ -40,7 +42,7 @@ export const PDFLibrary: React.FC = () => {
   const [search, setSearch] = useState('');
   const [selectedCol, setSelectedCol] = useState<string | null>(null);
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
-  
+
   // Modals controller
   const [showUploadModal, setShowUploadModal] = useState(false);
   const [showColModal, setShowColModal] = useState(false);
@@ -57,8 +59,8 @@ export const PDFLibrary: React.FC = () => {
 
   // Filter application
   const filteredPdfs = pdfs.filter(p => {
-    const sMatch = p.title.toLowerCase().includes(search.toLowerCase()) || 
-                   p.fileName.toLowerCase().includes(search.toLowerCase());
+    const sMatch = p.title.toLowerCase().includes(search.toLowerCase()) ||
+      p.title.toLowerCase().includes(search.toLowerCase());
     const cMatch = selectedCol ? p.collection_id === selectedCol : true;
     const tMatch = selectedTag ? p.tags.includes(selectedTag) : true;
     return sMatch && cMatch && tMatch;
@@ -78,10 +80,10 @@ export const PDFLibrary: React.FC = () => {
     setColDesc('');
     setShowColModal(false);
   };
-  
+
   return (
     <div className="space-y-6 relative">
-      
+
       {/* Header bar actions */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div className="text-left">
@@ -100,37 +102,19 @@ export const PDFLibrary: React.FC = () => {
       {/* FILTER BUTTONS & QUICK SEARCH FOR INDEX */}
       <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
         <div className="flex-1 w-full md:max-w-md">
-          <Input 
-            placeholder="Filter files by titles or filename metrics..." 
+          <Input
+            placeholder="Filter files by titles or filename metrics..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             icon={<Search className="h-4 w-4" />}
           />
-        </div>
-
-        <div className="flex items-center gap-3 w-full md:w-auto shrink-0 justify-between md:justify-end">
-          {/* Layout presentation Switcher controls */}
-          <div className="border border-slate-200 dark:border-slate-800 rounded-xl p-1 bg-white dark:bg-slate-900 flex gap-1 select-none">
-            <button 
-              onClick={() => setViewType('grid')}
-              className={`p-1.5 rounded-lg cursor-pointer transition ${viewType === 'grid' ? 'bg-indigo-50 dark:bg-slate-800 text-indigo-650 dark:text-indigo-400' : 'text-slate-400 hover:text-slate-700'}`}
-            >
-              <Grid2X2 className="h-4 w-4" />
-            </button>
-            <button 
-              onClick={() => setViewType('list')}
-              className={`p-1.5 rounded-lg cursor-pointer transition ${viewType === 'list' ? 'bg-indigo-50 dark:bg-slate-800 text-indigo-650 dark:text-indigo-400' : 'text-slate-400 hover:text-slate-700'}`}
-            >
-              <List className="h-4 w-4" />
-            </button>
-          </div>
         </div>
       </div>
 
       {/* CATEGORY COLLECTION SLIDER AND CORRESPONDING TAGS */}
       <div className="flex flex-wrap gap-2 items-center">
         <span className="text-xs font-bold text-slate-400 uppercase tracking-widest shrink-0">Collections:</span>
-        <button 
+        <button
           onClick={() => setSelectedCol(null)}
           className={`px-3 py-1.5 text-xs font-bold rounded-xl cursor-pointer transition ${!selectedCol ? 'bg-indigo-600 text-white' : 'border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400'}`}
         >
@@ -140,11 +124,10 @@ export const PDFLibrary: React.FC = () => {
           <button
             key={col.id}
             onClick={() => setSelectedCol(col.id)}
-            className={`px-3 py-1.5 text-xs font-bold rounded-xl cursor-pointer transition flex items-center gap-1.5 ${
-              selectedCol === col.id 
-                ? 'bg-indigo-600 text-white' 
+            className={`px-3 py-1.5 text-xs font-bold rounded-xl cursor-pointer transition flex items-center gap-1.5 ${selectedCol === col.id
+                ? 'bg-indigo-600 text-white'
                 : 'border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800'
-            }`}
+              }`}
           >
             <span className="h-2 w-2 rounded-full" style={{ backgroundColor: col.color }} />
             <span>{col.name}</span>
@@ -154,70 +137,37 @@ export const PDFLibrary: React.FC = () => {
 
       {/* RENDER GRID VS LIST VIEWS */}
       {filteredPdfs.length === 0 ? (
-        <EmptyState 
-          title="No grounded documents found" 
-          description="Try broadening your filter criteria or upload a new PDF manual to synthesize its coordinates." 
+        <EmptyState
+          title="No grounded documents found"
+          description="Try broadening your filter criteria or upload a new PDF manual to synthesize its coordinates."
           actionText="Upload PDF"
           onAction={() => setShowUploadModal(true)}
         />
-      ) : viewType === 'grid' ? (
+      ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
           {filteredPdfs.map(pdf => (
-            <PDFCard 
+            <PDFCard
               key={pdf.id}
-              pdf={pdf} 
+              pdf={pdf}
               onPreview={() => handleOpenDetail(pdf)}
               onDelete={() => deletePDF(pdf.id)}
             />
           ))}
         </div>
-      ) : (
-        <Table<PDFDocument> 
-          columns={[
-            { header: 'Reference', accessor: (row) => (
-              <div 
-                onClick={() => handleOpenDetail(row)}
-                className="flex items-center gap-2.5 cursor-pointer hover:text-indigo-650"
-              >
-                <BookOpen className="h-4 w-4 text-indigo-505" />
-                <span className="font-bold text-slate-800 dark:text-white">{row.title}</span>
-              </div>
-            ) },
-            { header: 'File Name', accessor: (row) => <span className="font-mono text-xs text-slate-400">{row.fileName}</span> },
-            { header: 'Size', accessor: (row) => <span className="font-semibold text-slate-500">{row.fileSize}</span> },
-            { header: 'Favorite', accessor: (row) => (
-              <button 
-                onClick={() => toggleFavoritePDF(row.id)}
-                className={`p-1 ${row.isFavorite ? 'text-amber-500' : 'text-slate-300'}`}
-              >
-                <Star className="h-4 w-4" fill={row.isFavorite ? 'currentColor' : 'none'} />
-              </button>
-            ) },
-            { header: 'Actions', accessor: (row) => (
-              <button 
-                onClick={() => deletePDF(row.id)}
-                className="text-rose-500 hover:text-rose-700 p-1.5 hover:bg-rose-50 rounded-lg transition"
-              >
-                <Trash2 className="h-4 w-4" />
-              </button>
-            ) }
-          ]}
-          data={filteredPdfs}
-        />
       )}
 
       {/* SLIDE-OVER DRAWER DETAIL PANEL FOR SINGLE PDF */}
       {activeDetailPdf && (
         <>
           {/* Drawer backdrop overlay */}
-          <div 
+          <div
             onClick={() => setActiveDetailPdf(null)}
             className="fixed inset-0 bg-slate-900/30 dark:bg-black/50 z-40 transition-opacity backdrop-blur-xs"
           />
 
           {/* Drawer body container */}
           <div className="fixed top-0 right-0 h-screen w-full max-w-2xl bg-white dark:bg-slate-900 shadow-2xl border-l border-slate-200 dark:border-slate-800 z-50 flex flex-col animate-in slide-in-from-right duration-350 overflow-hidden">
-            
+
             {/* Drawer header */}
             <div className="p-5 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between shrink-0">
               <div className="flex items-center gap-2.5">
@@ -226,7 +176,7 @@ export const PDFLibrary: React.FC = () => {
                   {activeDetailPdf.title}
                 </h2>
               </div>
-              <button 
+              <button
                 onClick={() => setActiveDetailPdf(null)}
                 className="h-8.5 w-8.5 border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-850 hover:bg-slate-50 rounded-xl text-slate-500 hover:text-slate-800 flex items-center justify-center transition cursor-pointer"
               >
@@ -238,8 +188,8 @@ export const PDFLibrary: React.FC = () => {
       )}
 
       {/* FLOAT MODALS */}
-      <Modal 
-        isOpen={showUploadModal} 
+      <Modal
+        isOpen={showUploadModal}
         onClose={() => setShowUploadModal(false)}
         title="Vectorize Documents to RAG Engine"
         maxWidth="md"
@@ -248,18 +198,17 @@ export const PDFLibrary: React.FC = () => {
           <p className="text-xs text-slate-500 leading-normal font-semibold">
             Upload document files (PDFs). We chunk and parse your texts segment by segment. Ground AI models with physical pointers.
           </p>
-          <UploadPDFBox 
-          collectionsList={collections}
+          <UploadPDFBox
+            collectionsList={collections}
             onUploadSuccess={(title, size, pages) => {
-            
               setShowUploadModal(false);
-            }} 
+            }}
           />
         </div>
       </Modal>
 
-      <Modal 
-        isOpen={showColModal} 
+      <Modal
+        isOpen={showColModal}
         onClose={() => setShowColModal(false)}
         title="Establish Document Category Collection"
         maxWidth="md"
@@ -271,16 +220,16 @@ export const PDFLibrary: React.FC = () => {
         }
       >
         <div className="space-y-4 text-left">
-          <Input 
-            label="Collection Name" 
-            placeholder="e.g. LLM Papers 2026" 
+          <Input
+            label="Collection Name"
+            placeholder="e.g. LLM Papers 2026"
             value={colName}
             onChange={(e) => setColName(e.target.value)}
             required
           />
-          <Input 
-            label="Brief Description (Optional)" 
-            placeholder="Describe what these documents are" 
+          <Input
+            label="Brief Description (Optional)"
+            placeholder="Describe what these documents are"
             value={colDesc}
             onChange={(e) => setColDesc(e.target.value)}
           />
