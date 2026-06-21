@@ -1,5 +1,5 @@
 import { asyncHandler } from "../utils/asyncHedler.js";
-import { PDFParse } from "pdf-parse";
+import pdf from "pdf-parse";
 import { RecursiveCharacterTextSplitter } from "@langchain/textsplitters";
 import { errorHandler } from "../utils/errorHendler.js";
 import { cleanBengaliText } from "../utils/bengaliCleaner.js";
@@ -23,10 +23,7 @@ const uploadController = asyncHandler(async (req, res, next) => {
 
   const uploadedFile = req.file;
 
-  const parser = new PDFParse({
-    data: uploadedFile.buffer,
-  });
-  const result = await parser.getText();
+  const result = await pdf(uploadedFile.buffer);
   const rawText = cleanBengaliText(result.text);
 
   const fileName = Buffer.from(uploadedFile.originalname, "latin1").toString(
