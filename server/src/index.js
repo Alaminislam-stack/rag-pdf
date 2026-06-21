@@ -18,6 +18,8 @@ app.use(
   })
 );
 
+// console.log(process.env.CREATIVEPROMPT)
+
 app.get('/', (req, res) => {
   res.send('Hello World!');
 });

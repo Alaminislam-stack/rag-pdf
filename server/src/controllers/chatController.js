@@ -17,9 +17,7 @@ const chatController = asyncHandler(async (req, res, next) => {
     name: "rag-documents",
   });
   if (!collection) {
-    return next(
-      new errorHandler(400, "Collection not found")
-    );
+    return next(new errorHandler(400, "Collection not found"));
   }
 
   // Embedding Function
@@ -36,10 +34,7 @@ const chatController = asyncHandler(async (req, res, next) => {
     queryEmbeddings: queryEmbedding,
     nResults: 5,
     where: {
-      $and: [
-        { userId: req.user.id },
-        { collectionId: collectionId }
-      ]
+      $and: [{ userId: req.user.id }, { collectionId: collectionId }],
     },
   });
 
@@ -66,13 +61,12 @@ const chatController = asyncHandler(async (req, res, next) => {
 
   let prompt;
 
+  const np = process.env.NORMALPROMPT
+
   const normalPrompt = `
-You are a helpful AI assistant.
-
-Answer the user's question ONLY from the provided context.
-
-If the answer is not available in the context, reply:
-"I could not find the answer in the uploaded PDF."
+ 
+  promot:
+  ${np}
 
 Context:
 ${context}
@@ -83,52 +77,12 @@ ${question}
 Answer:
 `;
 
+  const cp = process.env.CREATIVEPROMPT;
+
   const creativePrompt = `
-তুমি একজন অভিজ্ঞ HSC/SSC পরীক্ষক।
-
-সৃজনশীল প্রশ্নের উত্তর লেখার সময় নিচের নিয়মগুলো কঠোরভাবে অনুসরণ করবে:
-
-ক-নম্বর (জ্ঞানমূলক):
-
-১ নম্বরের উত্তর।
-সরাসরি সংজ্ঞা বা মূল বক্তব্য লিখবে।
-১টি ছোট প্যারাগ্রাফ।
-অতিরিক্ত ব্যাখ্যা দিবে না।
-২ থিকে ৩টি বাক্য হবে।
-
-
-খ-নম্বর (অনুধাবনমূলক):
-
-২ নম্বরের উত্তর।
-প্রথম প্যারায় মূল ধারণা বা সংজ্ঞা লিখবে।
-দ্বিতীয় প্যারায় ব্যাখ্যা, কারণ বা বিশ্লেষণ লিখবে।
-মোট ২টি প্যারাগ্রাফ।
-
-গ-নম্বর (প্রয়োগমূলক):
-
-৩ নম্বরের উত্তর।
-প্রথম প্যারায় জ্ঞানমূলক তথ্য।
-দ্বিতীয় প্যারায় অনুধাবনমূলক ব্যাখ্যা।
-তৃতীয় প্যারায় উদ্দীপকের সাথে সম্পর্ক স্থাপন করে প্রয়োগ দেখাবে।
-মোট ৩টি প্যারাগ্রাফ।
-
-ঘ-নম্বর (উচ্চতর দক্ষতামূলক):
-
-৪ নম্বরের উত্তর।
-প্রথম প্যারায় জ্ঞান।
-দ্বিতীয় প্যারায় অনুধাবন।
-তৃতীয় প্যারায় উদ্দীপকের সাথে সম্পর্ক ও বিশ্লেষণ।
-চতুর্থ প্যারায় মূল্যায়ন, মতামত ও যৌক্তিক উপসংহার।
-মোট ৪টি প্যারাগ্রাফ।
-
-অতিরিক্ত নির্দেশনা:
-
-উত্তর অবশ্যই Context থেকে তৈরি করবে।
-পরীক্ষার খাতার উপযোগী ভাষা ব্যবহার করবে।
-অপ্রয়োজনীয় তথ্য যোগ করবে না।
-ক, খ, গ, ঘ শিরোনাম ব্যবহার করবে।
-প্রতিটি অংশ আলাদা করে লিখবে।
-কোনো অংশ বাদ দিবে না।
+  
+  prompt:
+  ${cp}
 
 Context:
 ${context}
