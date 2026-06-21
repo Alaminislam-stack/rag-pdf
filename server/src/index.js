@@ -28,6 +28,12 @@ app.use('/api/v1/', apiRoutes);
 
 app.use(errorMeddleware);
 
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
-});
+// Vercel serverless: export app instead of calling app.listen()
+export default app;
+
+// Local dev fallback
+if (process.env.NODE_ENV !== 'production') {
+  app.listen(port || 5000, () => {
+    console.log(`Server is running on port ${port || 5000}`);
+  });
+}
