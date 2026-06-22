@@ -1,4 +1,4 @@
-import { Lock, Mail, Sparkles, User } from "lucide-react";
+import { Loader2, Lock, Mail, Sparkles, User } from "lucide-react";
 import React, { useState } from "react";
 import { Button, Card, Input } from "../components/common/UIControls";
 import { supabase } from "@/src/utils/supabase/supabase";
@@ -11,6 +11,7 @@ function Register() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false)
     const { session, loading: authLoading } = useAuth();
 
   if (authLoading) {
@@ -23,6 +24,7 @@ function Register() {
 
   const handleAction = (e: React.FormEvent) => {
     e.preventDefault(); 
+    setLoading(true)
     supabase.auth
       .signUp({
         email: email,
@@ -34,6 +36,7 @@ function Register() {
         },
       })
       .then(({ data, error }) => {
+        setLoading(false)
         if (error) {
           toast.error(error.message);
         } else {
@@ -92,8 +95,8 @@ function Register() {
                 required
               />
 
-              <Button type="submit" className="w-full mt-4">
-                Enter Workspace
+              <Button type="submit" disabled={loading} className="w-full mt-4">
+                {loading ? <Loader2 className="h-4 w-4 animate-spin" />: 'Enter Workspace'}
               </Button>
 
               <p className="text-xs text-center text-slate-500 dark:text-slate-400 mt-6">
